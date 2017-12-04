@@ -9,6 +9,8 @@ We implemented and present here four different approaches, two from classical co
 
 The simulator can be downloaded here: https://github.com/udacity/self-driving-car-sim/releases
 
+![](/screenshot.png)
+
 ## PID (Proportional, Integral, Derivative controller)
 
 The observed variables are cross-track error, current steering angle and current speed.
