@@ -45,7 +45,7 @@ For simplicity we only use three output classes (turn left/right, go straight).
 
 The learning rate is adapted by an Adam optimizer. We trained for only five epochs to avoid overfitting, given the low size of the training data, and achieved 93% accuracy on the training set and 78% on the validation set.
 
-The only controlled variable is steering value. Speed is kept constant at 30mph.
+The only controlled variable is steering value. Speed is kept constant at 15mph.
 
 ## RL (Reinforcement Learning)
 
