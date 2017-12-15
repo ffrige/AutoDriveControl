@@ -51,4 +51,12 @@ The only controlled variable is steering value. Speed is kept constant at 15mph.
 
 ## RL (Reinforcement Learning)
 
-TODO
+The controller is the same neural network we used for the supervised learning solution, only adapted to output a single continuous action value instead of three discrete values.
+
+We then adopt a policy search strategy, specifically DDPG (deep deterministic policy gradient), where the actor is the controller itself and the critic is a value network that constantly improves the actor’s weights by maximizing the reward.
+
+We created an OpenAI Gym environment to wrap the communication with the Udacity car simulator via a TCP socket and allow keras-rl to train an agent using the simulator. We send in an action (steering angle) and receive an observation (image) and reward (function of the current cross-track error).
+
+The critic network takes both state and action as input (although actions are only merged in the second layer) and outputs a Q-value. Target networks are automatically implemented by keras-rl to improve stability during the learning process.
+
+For the reward we only considered the cross-track error, because speed was fixed, but it would be interesting to include a speed term in the general reward expression and see if the agent can improve lap times. The main problem is again training time.
