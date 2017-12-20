@@ -70,7 +70,7 @@ class SimplePIController:
 
 class CarEnv(gym.Env):
 
-    MaxSteps = 30
+    MaxSteps = 10000
 
     @property
     def action_space(self):
@@ -103,17 +103,19 @@ class CarEnv(gym.Env):
         #execute action
         self.steps += 1        
         #steering_angle = (float(action)-1.)/4.
-        steering_angle = float(action)/4.
+        steering_angle = float(action)
         throttle = self.controller.update(self.speed);
         restart = 0
         self.connection.send(bytearray(struct.pack("ff?", steering_angle, throttle, bool(restart))))
-
+        #print("sending steering angle = {0}, throttle = {1} ".format(steering_angle, throttle))
+        
         #return new state and reward
         readBuffer = self.connection.recv(64000)
         cte, self.speed = struct.unpack('ff',readBuffer[:8])
         image = Image.open(BytesIO(base64.b64decode(readBuffer[8:])))
         observation = pre_process(np.asarray(image)) #return image -> input to actor policy network
         reward = -np.log(1+abs(cte))
+        #print("received cte = {0}, speed = {1} ".format(cte, self.speed))
 
         #check if episode is complete
         if self.steps >= CarEnv.MaxSteps:
@@ -130,7 +132,7 @@ class CarEnv(gym.Env):
         throttle = 0.
         restart = 1
         self.connection.send(bytearray(struct.pack("ff?", steering_angle, throttle, bool(restart))))
-
+        
         #return new state and reward
         readBuffer = self.connection.recv(64000)
         cte, self.speed = struct.unpack('ff',readBuffer[:8])

@@ -126,11 +126,12 @@ public class mySocket : MonoBehaviour {
 		CarRemoteControl.SteeringAngle = BitConverter.ToSingle(readBuffer, 0);
 		CarRemoteControl.Acceleration = BitConverter.ToSingle(readBuffer, 4);
 
-		//restart signal
+		//restart signal -> move to closest waypoint
 		bool restartGame = BitConverter.ToBoolean(readBuffer,8);
 		if (restartGame) {
-			_carController.transform.localPosition = new Vector3(-40.62f,2.6f,108.73f);
-			_carController.transform.localEulerAngles = new Vector3(-0.293f,236.078f,0.0f);
+			_carController.StopCar();
+			_carController.transform.localPosition = wpt.RestartPosition(_carController);
+			_carController.transform.rotation = wpt.RestartOrientation(_carController);
 		}
 
 	}
